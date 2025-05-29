@@ -18,6 +18,8 @@ defmodule AlchemicalLifeWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :home
+
+    live "/life", LifeLive
   end
 
   # Other scopes may use custom stacks.
