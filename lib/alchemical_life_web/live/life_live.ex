@@ -13,7 +13,7 @@ defmodule AlchemicalLifeWeb.LifeLive do
     grid = Game.get_grid()
 
     new_socket = assign(socket,
-      grid_size: 20,
+      grid_size: Game.grid_size(),
       grid: grid
     )
 
@@ -34,11 +34,10 @@ defmodule AlchemicalLifeWeb.LifeLive do
     </div>
 
     <div class="flex justify-center p-4">
-      <button phx-click="start" class="px-4 py-2 bg-blue-500 text-white rounded">Start</button>
-    </div>
-
-    <div class="flex justify-center p-4">
-      <button phx-click="reset" class="px-4 py-2 bg-red-500 text-white rounded">Reset</button>
+      <div class="flex space-x-4">
+        <button phx-click="start" class="px-4 py-2 border border-black rounded">Start</button>
+        <button phx-click="reset" class="px-4 py-2 border border-black rounded">Reset</button>
+      </div>
     </div>
     """
   end

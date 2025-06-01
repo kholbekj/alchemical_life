@@ -22,7 +22,7 @@ defmodule AlchemicalLife.Application do
       # Start to serve requests, typically the last entry
       AlchemicalLifeWeb.Endpoint,
       # Start the Game of Life GenServer
-      {AlchemicalLife.Life.Game, grid: [[5, 5], [6, 5], [6, 3], [8, 4], [9, 5], [10, 5], [11, 5]]}
+      {AlchemicalLife.Life.Game, grid: AlchemicalLife.Life.Game.default_grid()}
 
     ]
 
