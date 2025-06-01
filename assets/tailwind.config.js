@@ -15,10 +15,6 @@ module.exports = {
     extend: {
       colors: {
         brand: "#FD4F00",
-      },
-      gridTemplateColumns: {
-        '20': 'repeat(20, minmax(0, 1fr))',
-        '40': 'repeat(40, minmax(0, 1fr))'
       }
     },
   },
