@@ -20,7 +20,10 @@ defmodule AlchemicalLife.Application do
       # Start a worker by calling: AlchemicalLife.Worker.start_link(arg)
       # {AlchemicalLife.Worker, arg},
       # Start to serve requests, typically the last entry
-      AlchemicalLifeWeb.Endpoint
+      AlchemicalLifeWeb.Endpoint,
+      # Start the Game of Life GenServer
+      {AlchemicalLife.Life.Game, grid: [[5, 5], [6, 5], [6, 3], [8, 4], [9, 5], [10, 5], [11, 5]]}
+
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
