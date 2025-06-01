@@ -18,7 +18,7 @@ defmodule AlchemicalLife.Life.Game do
   end
 
   def init(args) do
-    {:ok, %{grid: args[:grid] || []}}
+    {:ok, %{grid: args[:grid] || [], notick: true}}
   end
 
   def handle_call(:get_grid, _from, state) do
@@ -32,11 +32,20 @@ defmodule AlchemicalLife.Life.Game do
     {:reply, :ok, new_state}
   end
 
+  def handle_info(:tick, state) when state.notick do
+    # If not ticking, just return without doing anything
+    {:noreply, state}
+  end
   def handle_info({:tick, notick: notick }, state) when notick do
     # If not ticking, just return without doing anything
     {:noreply, state}
   end
-  def handle_info(message, state) when message in [:tick, {:tick, notick: false}] do
+  def handle_info({:tick, notick: false}, state) do
+
+    new_state = %{state | notick: false}
+    handle_info(:tick, new_state)
+  end
+  def handle_info(:tick, state) do
 
     # Logic to evolve the grid state
     new_grid = evolve_grid(state.grid)
@@ -51,6 +60,7 @@ defmodule AlchemicalLife.Life.Game do
 
     {:noreply, new_state}
   end
+
 
   def evolve_grid(grid) do
     # Conways Game of Life rules:
