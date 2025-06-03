@@ -20,12 +20,12 @@ defmodule AlchemicalLife.Life.Game do
     GenServer.call(__MODULE__, :reset)
   end
 
-  def tick(args \\ [notick: false]) do
-    send(GenServer.whereis(__MODULE__), {:tick, args})
+  def start do
+    GenServer.call(__MODULE__, :start)
   end
 
   def init(args) do
-    {:ok, %{grid: args[:grid] || [], notick: true}}
+    {:ok, %{grid: args[:grid] || [], running: false}}
   end
 
   def handle_call(:get_grid, _from, state) do
@@ -34,23 +34,25 @@ defmodule AlchemicalLife.Life.Game do
 
   def handle_call(:reset, _from, _state) do
     # Reset the grid to an empty state
-    new_state = %{grid: @default_grid, notick: true}
+    new_state = %{grid: @default_grid, running: false}
     Phoenix.PubSub.broadcast(AlchemicalLife.PubSub, "game_of_life:updates", {:grid_updated, new_state.grid})
     {:reply, :ok, new_state}
   end
 
-  def handle_info(:tick, state) when state.notick do
-    # If not ticking, just return without doing anything
-    {:noreply, state}
+  def handle_call(:start, _from, state) when state.running do
+    # If already running, just return
+    {:reply, :ok, state}
   end
-  def handle_info({:tick, notick: notick }, state) when notick do
-    # If not ticking, just return without doing anything
-    {:noreply, state}
+  def handle_call(:start, _from, state) do
+    # Start the game by ticking every second
+    Process.send_after(self(), :tick, 1000)
+    new_state = %{state | running: true}
+    {:reply, :ok, new_state}
   end
-  def handle_info({:tick, notick: false}, state) do
 
-    new_state = %{state | notick: false}
-    handle_info(:tick, new_state)
+  def handle_info(:tick, state) when not state.running do
+    # If not ticking, just return without doing anything
+    {:noreply, state}
   end
   def handle_info(:tick, state) do
 

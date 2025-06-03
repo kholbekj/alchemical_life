@@ -49,7 +49,7 @@ defmodule AlchemicalLifeWeb.LifeLive do
 
   def handle_event("start", _params, socket) do
     # Logic to start the game. We want to evolve state once every 1s.
-    Game.tick(notick: false)
+    Game.start
 
     {:noreply, socket}
   end
